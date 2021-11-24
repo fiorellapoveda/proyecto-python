@@ -1,8 +1,8 @@
-##Repositorio para el proyecto de python para el curso de Programación bajo plataformas abiertas.
+#Repositorio para el proyecto de python para el curso de Programación bajo plataformas abiertas.
 
-###Proyecto propuesto: Juego de Snake.
+##Proyecto propuesto: Juego de Snake.
 
-###Rúbrica negociada:
+##Rúbrica negociada:
 **1. Menus: 10%**
   - Instrucciones.
   - Iniciar.
@@ -23,7 +23,7 @@
 **6. Estética y sonidos 20%**
   - Sonido de fondo, cuando se come un ítem, cuando se pierde una vida, cuando termina el juego, por ejemplo.
 
-###Integrantes:
+##Integrantes:
  - Fiorella Poveda Chaves, B86145.
  - Luis Ricardo Carmona Mora, B91646.
  - Julián Zamora Villalobos B07025.
