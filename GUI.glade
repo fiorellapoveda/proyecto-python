@@ -21,7 +21,7 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkButton" id="button_1">
-                <property name="label" translatable="yes">JUGAR</property>
+                <property name="label" translatable="yes">PLAY</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button_2">
-                <property name="label" translatable="yes">Instrucciones</property>
+                <property name="label" translatable="yes">Instructions</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -49,7 +49,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button_3">
-                <property name="label" translatable="yes">Récords</property>
+                <property name="label" translatable="yes">Records</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -62,8 +62,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="salir">
-                <property name="label" translatable="yes">Salir</property>
+              <object class="GtkButton" id="buton_4">
+                <property name="label" translatable="yes">Quit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
