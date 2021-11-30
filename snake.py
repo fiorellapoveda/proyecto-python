@@ -1,18 +1,26 @@
-#! /usr/local/bin/python3
+#! /usr/bin/python3
+
+#Arriba falta el '/local/' entre usr y bin
+
+#FALTA:
+    #Cambiar los sonidos para que no queden igual a los del video
+    #Linkear a glade
+    #Mostrar la opción de reiniciar o salir (con glade)
+    #Que la manzana no salga sobre los muros
+
 """
 Código base de ejecución del programa:
 Se contruyen los niveles, se importan imágenes y sonidos y ...
 """
 import pygame
-from pygame.locals import *
 import time
+from pygame.locals import *
 import random
 
 SIZE = 40
 # BACKGROUND_COLOR = (110, 110, 5)
 
-
-class Level:  # Esta clase se encarga de crear los niveles
+class Level:  #Creates the levels
     def __init__(self, parent_screen, layout, timer, speed):
         self.timer = timer
         self.speed = speed
@@ -33,80 +41,78 @@ class Level:  # Esta clase se encarga de crear los niveles
             x = Wall(self.parent_screen, wall[0], wall[1])
             x.draw()
 
-
-class Wall():
+class Wall(): #Creates the wall
     def __init__(self, parent_screen, x, y):
         self.image = pygame.image.load('resources/wall.jpeg').convert()
         self.parent_screen = parent_screen
         self.x = x
         self.y = y
 
-    def draw(self):  # Dibuja la manzana
+    def draw(self):
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
-
-class Apple:  # Clase que define a la manzana
+class Food:  #Defines the food
     def __init__(self, parent_screen):
         self.image = pygame.image.load('resources/apple.jpeg').convert()
         self.parent_screen = parent_screen
         self.x = SIZE*3
         self.y = SIZE*3
 
-    def draw(self):  # Dibuja la manzana
+    def draw(self):  #Draws the food
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
-    def move(self):  # Coloca la manzana en posición aleatoria
+    def move(self):  #Puts the food in a random position
         self.x = random.randint(0, 24)*SIZE
         self.y = random.randint(0, 19)*SIZE
 
-
-class Snake:  # Clase que define la serpiente
+class Snake:  #Defines the snake
     def __init__(self, parent_screen, length):
         self.length = length
         self.parent_screen = parent_screen
-        self.block = pygame.image.load('resources/block.jpeg').convert()
+        self.block = pygame.image.load('resources/block.jpg').convert()
         self.x = [SIZE]*length
         self.y = [SIZE]*length
         self.direction = 'down'
         self.last_direction = 'down'
 
-    def increase_length(self):  # Serpiente crece
+    def increase_length(self):  #Increases the length of the snake
         self.length += 1
         self.x.append(-1)
         self.y.append(-1)
 
-    def move_up(self):  # Mover arriba
+    #Methods to move the snake
+
+    def move_up(self):
         if self.last_direction != 'down':
             self.direction = 'up'
             self.last_direction = 'up'
         else:
             pass
 
-    def move_down(self):  # Mover abajo
+    def move_down(self):
         if self.last_direction != 'up':
             self.direction = 'down'
             self.last_direction = 'down'
         else:
             pass
 
-    def move_right(self):  # Mover derecha
+    def move_right(self):
         if self.last_direction != 'left':
             self.direction = 'right'
             self.last_direction = 'right'
         else:
             pass
 
-    def move_left(self):  # Mover izquierda
+    def move_left(self):
         if self.last_direction != 'right':
             self.direction = 'left'
             self.last_direction = 'left'
         else:
             pass
 
-    def walk(self):  # Movimiento del cuerpo
-
+    def walk(self):  #Moves the body of the snake
         for i in range(self.length-1, 0, -1):
             self.x[i] = self.x[i - 1]
             self.y[i] = self.y[i - 1]
@@ -127,12 +133,12 @@ class Snake:  # Clase que define la serpiente
             self.parent_screen.blit(self.block, (self.x[i], self.y[i]))
         pygame.display.flip()
 
-
 class Game:
     def __init__(self):
-        pygame.init()  # Inicializa módulos de pygame
-        self.surface = pygame.display.set_mode((1000, 800))  # Inicializa ventana
-        pygame.display.set_caption("Codebasics Snake And Apple Game")
+        pygame.init()  #Inicializes pygame
+        # Inicializes the window to play
+        self.surface = pygame.display.set_mode((1000, 800))
+        pygame.display.set_caption("Codebasics Snake And Food Game")
         pygame.mixer.init()
         self.play_background_music()
         self.snake = Snake(self.surface, 2)
@@ -141,15 +147,16 @@ class Game:
         self.level.draw()
         self.wall = Wall(self.surface, 0, 0)
         self.wall.draw()
-        self.apple = Apple(self.surface)
-        self.apple.draw()
+        self.food = Food(self.surface)
+        self.food.draw()
 
-    def is_collision(self, x1, y1, x2, y2):  # Colisión de un objeto
+    def is_collision(self, x1, y1, x2, y2):  #Collision with an object
         if x1 == x2 and y1 == y2:
             return True
         return False
 
-    # Renderizado y sonidos
+    #Rendering and sounds
+
     def play_background_music(self):
         pygame.mixer.music.load('resources/bg_music_1.mp3')
         pygame.mixer.music.play()
@@ -159,25 +166,25 @@ class Game:
         pygame.mixer.Sound.play(sound)
 
     def render_background(self):
-        bg = pygame.image.load('resources/background1.jpeg')
+        bg = pygame.image.load('resources/background.jpg')
         self.surface.blit(bg, (0, 0))
 
     def play(self):
         self.render_background()
         self.snake.walk()
-        self.apple.draw()
+        self.food.draw()
         self.level.draw()
         self.wall.draw()
         self.display_score()
         pygame.display.flip()
 
-        # Serpiente come manzana:
-        if self.is_collision(self.snake.x[0], self.snake.y[0], self.apple.x, self.apple.y):
+        #When the snake eats the apple:
+        if self.is_collision(self.snake.x[0], self.snake.y[0], self.food.x, self.food.y):
             self.play_sound('ding')
             self.snake.increase_length()
-            self.apple.move()
+            self.food.move()
 
-        # Serpiente choca contra sí misma:
+        #When the snake collides with itself:
         for i in range(3, self.snake.length):
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound('crash')
@@ -190,17 +197,16 @@ class Game:
                 self.play_sound('crash')
                 raise 'game over'
 
-    def show_game_over(self):  # Juego terminado
-        self.render_background()  # Limpia la pantalla
+    def show_game_over(self):  #Game over
+        self.render_background()  #Clears the background
         font = pygame.font.SysFont('arial', 30)
         line1 = font.render(f"Game is over! Your score is {self.snake.length}", True, (255, 255, 255))
-        self.surface.blit(line1, (200, 300))  # Esto se agrega siempre que se quiera mostrar algo
+        self.surface.blit(line1, (200, 300))
         line2 = font.render("To play again press Enter. To exit press Escape!", True, (255, 255, 255))
         self.surface.blit(line2, (200, 350))
         pygame.display.flip()
 
         pygame.mixer.music.pause()
-
 
     def display_score(self):
     # When ever you want to show something on a
@@ -211,7 +217,7 @@ class Game:
 
     def reset(self):
         self.snake = Snake(self.surface, 2)
-        self.apple = Apple(self.surface)
+        self.food = Food(self.surface)
 
     def run(self):
         running = True
@@ -247,9 +253,12 @@ class Game:
                 pause = True
                 self.reset()
 
-            time.sleep(0.5)
+            time.sleep(.2)
 
-
-if __name__ == '__main__':
+def runGame():
     game = Game()
     game.run()
+
+#if __name__ == '__main__':
+#    game = Game()
+#    game.run()
