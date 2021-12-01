@@ -34,4 +34,4 @@ Juego de snake con niveles. La lógica del juego se encuentra dividida en cuatro
 ## Integrantes:
  - Fiorella Poveda Chaves, B86145.
  - Luis Ricardo Carmona Mora, B91646.
- - Julián Zamora Villalobos B07025.
+ - Julián Zamora Villalobos, B07025.
