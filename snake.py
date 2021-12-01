@@ -142,7 +142,7 @@ class Game:
         self.play_background_music()
         self.snake = Snake(self.surface, 2)
         self.snake.draw()
-        self.level = Level(self.surface, 'layout0')
+        self.level = Level(self.surface, 'layout3')
         self.level.draw()
         self.food = Food(self.surface)
         self.food.draw()
@@ -177,6 +177,8 @@ class Game:
         pygame.display.flip()
         if timer == 0:
             raise 'game over'
+        if lives == 0:
+            raise 'game over'
         # When the snake eats the apple:
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.food.x, self.food.y):
             self.play_sound('Bite')
@@ -188,11 +190,13 @@ class Game:
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound('boing')
                 raise 'game over'
+
         # Serpiente choca con un muro
         for wall in self.level.position_wall:
             if self.is_collision(self.snake.x[0], self.snake.y[0], wall[0], wall[1]):
                 self.play_sound('boing')
-                raise 'game over'
+                self.lives -= 1
+                self.reset()
 
         for wall in self.level.position_wall:
             if self.is_collision(self.food.x, self.food.y, wall[0], wall[1]):
@@ -237,8 +241,8 @@ class Game:
         self.food = Food(self.surface)
 
     def run(self):
-        lives = 3
-        countdown = 10
+        self.lives = 3
+        countdown = 1000
         running = True
         pause = False
         while running:
@@ -246,8 +250,7 @@ class Game:
                 if event.type == KEYDOWN:
 
                     if event.key == K_RETURN:
-                        lives -= 1
-                        countdown = 10
+                        countdown = 1000
                         pygame.mixer.music.unpause()
                         pause = False
                     if event.key == K_ESCAPE:
@@ -266,8 +269,9 @@ class Game:
                 elif event.type == QUIT:
                     running = False
             try:
+
                 if not pause:
-                    self.play(countdown, lives)
+                    self.play(countdown, self.lives)
             except Exception as e:
                 self.show_game_over()
                 pause = True
