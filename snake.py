@@ -155,7 +155,7 @@ class Game:
     # Rendering and sounds
 
     def play_background_music(self):
-        pygame.mixer.music.load('resources/bg_music_1.mp3')
+        pygame.mixer.music.load('resources/music_game.mp3')
         pygame.mixer.music.play()
 
     def play_sound(self, sound):
@@ -178,19 +178,19 @@ class Game:
             raise 'game over'
         # When the snake eats the apple:
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.food.x, self.food.y):
-            self.play_sound('ding')
+            self.play_sound('Bite')
             self.snake.increase_length()
             self.food.move()
 
         # When the snake collides with itself:
         for i in range(3, self.snake.length):
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
-                self.play_sound('crash')
+                self.play_sound('boing')
                 raise 'game over'
         # Serpiente choca con un muro
         for wall in self.level.position_wall:
             if self.is_collision(self.snake.x[0], self.snake.y[0], wall[0], wall[1]):
-                self.play_sound('crash')
+                self.play_sound('boing')
                 raise 'game over'
 
         for wall in self.level.position_wall:
