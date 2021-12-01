@@ -3,7 +3,6 @@
 #Arriba falta el '/local/' entre usr y bin
 
 #FALTA:
-    #Cambiar los sonidos para que no queden igual a los del video
     #Linkear a glade
     #Mostrar la opción de reiniciar o salir (con glade)
 
@@ -53,8 +52,8 @@ class Food:  # Defines the food
     def __init__(self, parent_screen):
         self.image = pygame.image.load('resources/apple.jpeg').convert()
         self.parent_screen = parent_screen
-        self.x = SIZE*3
-        self.y = SIZE*3
+        self.x = random.randint(1, 23)*SIZE
+        self.y = random.randint(2, 18)*SIZE
 
     def draw(self):  # Draws the food
         self.parent_screen.blit(self.image, (self.x, self.y))
@@ -134,6 +133,7 @@ class Snake:  # Defines the snake
 
 class Game:
     def __init__(self):
+        self.layout = 0
         pygame.init()  # Inicializes pygame
         # Inicializes the window to play
         self.surface = pygame.display.set_mode((1000, 800))
@@ -142,8 +142,9 @@ class Game:
         self.play_background_music()
         self.snake = Snake(self.surface, 2)
         self.snake.draw()
-        self.level = Level(self.surface, 'layout3')
-        self.level.draw()
+        self.level = Level(self.surface, 'layout0')
+        #self.level.draw()
+
         self.food = Food(self.surface)
         self.food.draw()
 
@@ -170,13 +171,29 @@ class Game:
         self.render_background()
         self.snake.walk()
         self.food.draw()
-        self.level.draw()
+        if self.layout == 0:
+            self.level = Level(self.surface, 'layout0')
+            self.level.draw()
+        if self.layout == 1:
+            self.level = Level(self.surface, 'layout1')
+            self.level.draw()
+        if self.layout == 2:
+            self.level = Level(self.surface, 'layout2')
+            self.level.draw()
+        if self.layout == 3:
+            self.level = Level(self.surface, 'layout3')
+            self.level.draw()
+        if self.layout == 4:
+            raise 'game over'
+
         self.display_score()
         self.display_countdown(timer)
         self.display_lives(lives)
         pygame.display.flip()
         if timer == 0:
-            raise 'game over'
+            self.layout += 1
+            self.countdown = 100
+            self.reset()
         if lives == 0:
             raise 'game over'
         # When the snake eats the apple:
@@ -236,6 +253,8 @@ class Game:
         live = font.render(f'Lives left: {lives}', True, (255, 255, 255))
         self.surface.blit(live, (400, 10))
 
+
+
     def reset(self):
         self.snake = Snake(self.surface, 2)
         self.food = Food(self.surface)
@@ -243,7 +262,7 @@ class Game:
     def run(self):
         self.score = 0
         self.lives = 3
-        countdown = 1000
+        self.countdown = 100
         running = True
         pause = False
         while running:
@@ -251,7 +270,7 @@ class Game:
                 if event.type == KEYDOWN:
 
                     if event.key == K_RETURN:
-                        countdown = 1000
+                        self.countdown = 100
                         pygame.mixer.music.unpause()
                         pause = False
                     if event.key == K_ESCAPE:
@@ -272,14 +291,14 @@ class Game:
             try:
 
                 if not pause:
-                    self.play(countdown, self.lives)
+                    self.play(self.countdown, self.lives)
             except Exception as e:
                 self.show_game_over()
                 pause = True
                 self.reset()
 
             time.sleep(.2)
-            countdown -= 1
+            self.countdown -= 1
 
 
 def runGame():
