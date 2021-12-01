@@ -2,9 +2,7 @@
 
 ### Para inicializar el programa:
 
-Juego de snake con niveles. La lógica del juego se encuentra dividida en cuatro archivos; para correr el código desde la terminal debe ejecutarse el "main.py".
-\nPara ejecutar y probar el juego es necesario tener instalada la biblioteca pygame (sudo pip3 install pygame).
-\nEste código fue realizado en máquinas virtuales con instalaciones de Ubuntu version 20.04 y un repositorio en github.
+Juego de snake con niveles. La lógica del juego se encuentra dividida en cuatro archivos; para correr el código desde la terminal debe ejecutarse el "main.py". Para ejecutar y probar el juego es necesario tener instalada la biblioteca pygame (sudo pip3 install pygame). Este código fue realizado en máquinas virtuales con instalaciones de Ubuntu version 20.04 y un repositorio en github.
 
 ### Rúbrica negociada:
 
