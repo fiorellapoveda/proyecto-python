@@ -19,7 +19,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_1">
-                <property name="label" translatable="yes">Save Record</property>
+                <property name="label" translatable="yes">Guardar Record</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -33,7 +33,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button_2">
-                <property name="label" translatable="yes">Play Again</property>
+                <property name="label" translatable="yes">Volver a Jugar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -47,7 +47,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button_3">
-                <property name="label" translatable="yes">Main Menu</property>
+                <property name="label" translatable="yes">Volver a Menú</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -70,7 +70,7 @@
           <object class="GtkImage" id="image">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">../resources/game_over.png</property>
+            <property name="pixbuf">../../Descargas/2927801.png</property>
           </object>
           <packing>
             <property name="expand">False</property>
