@@ -182,6 +182,7 @@ class Game:
         # When the snake eats the apple:
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.food.x, self.food.y):
             self.play_sound('Bite')
+            self.score += 1
             self.snake.increase_length()
             self.food.move()
 
@@ -206,7 +207,7 @@ class Game:
     def show_game_over(self):  # Game over
         self.render_background()  # Clears the background
         font = pygame.font.SysFont('arial', 30)
-        line1 = font.render(f"Game is over! Your score is {self.snake.length}", True, (255, 255, 255))
+        line1 = font.render(f"Game is over! Your score is {self.score}", True, (255, 255, 255))
         self.surface.blit(line1, (200, 300))
         line2 = font.render("To play again press Enter. To exit press Escape!", True, (255, 255, 255))
         self.surface.blit(line2, (200, 350))
@@ -218,29 +219,29 @@ class Game:
         # When ever you want to show something on a
         # surface you have to use the blit function
         font = pygame.font.SysFont('arial', 30)
-        score = font.render(f'Score: {self.snake.length-2}', True, (255, 255, 255))
+        score = font.render(f'Score: {self.score}', True, (255, 255, 255))
         self.surface.blit(score, (800, 10))
 
     def display_countdown(self, timer):
         # When ever you want to show something on a
         # surface you have to use the blit function
         font = pygame.font.SysFont('arial', 30)
-        score = font.render(f'Time left: {timer}', True, (255, 255, 255))
-        self.surface.blit(score, (10, 10))
+        time = font.render(f'Time left: {timer}', True, (255, 255, 255))
+        self.surface.blit(time, (10, 10))
 
     def display_lives(self, lives):
         # When ever you want to show something on a
         # surface you have to use the blit function
         font = pygame.font.SysFont('arial', 30)
-        score = font.render(f'Lives left: {lives}', True, (255, 255, 255))
-        self.surface.blit(score, (400, 10))
-
+        live = font.render(f'Lives left: {lives}', True, (255, 255, 255))
+        self.surface.blit(live, (400, 10))
 
     def reset(self):
         self.snake = Snake(self.surface, 2)
         self.food = Food(self.surface)
 
     def run(self):
+        self.score = 0
         self.lives = 3
         countdown = 1000
         running = True
