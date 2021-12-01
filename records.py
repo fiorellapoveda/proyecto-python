@@ -55,7 +55,7 @@ class Records:
         font = pygame.font.SysFont("arial",25)
         raw_records = archive.readlines()
         for item in raw_records:
-            line = font.render(f"{item}"), True, (255,255,255))
+            line = font.render(f"{item}", True, (255,255,255))
             self.surface.blit(line, (100, 100))
             print(line)
         self.display_records()
