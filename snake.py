@@ -229,8 +229,24 @@ class Game:
         line2 = font.render("To play again press Enter. To exit press Escape!", True, (255, 255, 255))
         self.surface.blit(line2, (200, 350))
         pygame.display.flip()
-
         pygame.mixer.music.pause()
+        # Save highscores
+        highscores = []
+        archive = open('resources/highscores.txt', 'r')
+        raw_high = archive.readlines()
+        archive.close
+        print(raw_high)
+        for raw_score in raw_high:
+            highscores.append(int(raw_score))
+
+        if self.score > highscores[4]:
+            highscores.append(self.score)
+            highscores.sort(reverse=True)
+            highscores.pop(5)
+            archive = open('resources/highscores.txt', 'w')
+            for score in highscores:
+                archive.write('{}\n'.format(score))
+            archive.close()
 
     def display_score(self):
         # When ever you want to show something on a

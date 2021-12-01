@@ -1,5 +1,9 @@
 # Proyecto de Python: Juego de Snake.
 
+### Para inicializar el programa:
+Se debe tener instalada la biblioteca pygame (sudo pip3 install pygame)
+El archivo que se debe ejecutar es gui.py
+
 ### Rúbrica negociada:
 
 **1. Menus: 10%**
