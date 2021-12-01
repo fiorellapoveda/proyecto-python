@@ -60,5 +60,5 @@ class GUI:  # Construye el GUI a base del archivo
         #    pass
 
 if __name__ == '__main__':
-    gtk_object = GUI('/home/fiorella/Progra/proyecto-python/GUI.glade')
+    gtk_object = GUI('/home/luisricardo/proyecto-python/GUI.glade')
     gtk_object.start()

@@ -6,7 +6,6 @@
     #Cambiar los sonidos para que no queden igual a los del video
     #Linkear a glade
     #Mostrar la opción de reiniciar o salir (con glade)
-    #Que la manzana no salga sobre los muros
 
 """
 Código base de ejecución del programa:
@@ -18,12 +17,10 @@ from pygame.locals import *
 import random
 
 SIZE = 40
-# BACKGROUND_COLOR = (110, 110, 5)
 
-class Level:  #Creates the levels
-    def __init__(self, parent_screen, layout, timer, speed):
-        self.timer = timer
-        self.speed = speed
+
+class Level:  # Creates the levels
+    def __init__(self, parent_screen, layout):
         self.parent_screen = parent_screen
         archive = open('layouts/{}.txt'.format(layout), 'r')
         self.layout = []
@@ -33,15 +30,14 @@ class Level:  #Creates the levels
             x = i[:49]
             self.layout.append(x.split(' '))
         self.position_wall = [((ix)*40, (iy)*40) for iy, fila in enumerate(self.layout) for ix, i in enumerate(fila) if i == '1']
-        print(self.position_wall)
-        print(len(self.position_wall))
 
     def draw(self):
         for wall in self.position_wall:
             x = Wall(self.parent_screen, wall[0], wall[1])
             x.draw()
 
-class Wall(): #Creates the wall
+
+class Wall():  # Creates the wall
     def __init__(self, parent_screen, x, y):
         self.image = pygame.image.load('resources/wall.jpeg').convert()
         self.parent_screen = parent_screen
@@ -52,22 +48,24 @@ class Wall(): #Creates the wall
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
-class Food:  #Defines the food
+
+class Food:  # Defines the food
     def __init__(self, parent_screen):
         self.image = pygame.image.load('resources/apple.jpeg').convert()
         self.parent_screen = parent_screen
         self.x = SIZE*3
         self.y = SIZE*3
 
-    def draw(self):  #Draws the food
+    def draw(self):  # Draws the food
         self.parent_screen.blit(self.image, (self.x, self.y))
         pygame.display.flip()
 
-    def move(self):  #Puts the food in a random position
-        self.x = random.randint(0, 24)*SIZE
-        self.y = random.randint(0, 19)*SIZE
+    def move(self):  # Puts the food in a random position
+        self.x = random.randint(1, 23)*SIZE
+        self.y = random.randint(2, 18)*SIZE
 
-class Snake:  #Defines the snake
+
+class Snake:  # Defines the snake
     def __init__(self, parent_screen, length):
         self.length = length
         self.parent_screen = parent_screen
@@ -77,12 +75,12 @@ class Snake:  #Defines the snake
         self.direction = 'down'
         self.last_direction = 'down'
 
-    def increase_length(self):  #Increases the length of the snake
+    def increase_length(self):  # Increases the length of the snake
         self.length += 1
         self.x.append(-1)
         self.y.append(-1)
 
-    #Methods to move the snake
+    # Methods to move the snake
 
     def move_up(self):
         if self.last_direction != 'down':
@@ -112,7 +110,7 @@ class Snake:  #Defines the snake
         else:
             pass
 
-    def walk(self):  #Moves the body of the snake
+    def walk(self):  # Moves the body of the snake
         for i in range(self.length-1, 0, -1):
             self.x[i] = self.x[i - 1]
             self.y[i] = self.y[i - 1]
@@ -133,9 +131,10 @@ class Snake:  #Defines the snake
             self.parent_screen.blit(self.block, (self.x[i], self.y[i]))
         pygame.display.flip()
 
+
 class Game:
     def __init__(self):
-        pygame.init()  #Inicializes pygame
+        pygame.init()  # Inicializes pygame
         # Inicializes the window to play
         self.surface = pygame.display.set_mode((1000, 800))
         pygame.display.set_caption("Codebasics Snake And Food Game")
@@ -143,19 +142,17 @@ class Game:
         self.play_background_music()
         self.snake = Snake(self.surface, 2)
         self.snake.draw()
-        self.level = Level(self.surface, 'layout0', 300, 0.2)
+        self.level = Level(self.surface, 'layout0')
         self.level.draw()
-        self.wall = Wall(self.surface, 0, 0)
-        self.wall.draw()
         self.food = Food(self.surface)
         self.food.draw()
 
-    def is_collision(self, x1, y1, x2, y2):  #Collision with an object
+    def is_collision(self, x1, y1, x2, y2):  # Collision with an object
         if x1 == x2 and y1 == y2:
             return True
         return False
 
-    #Rendering and sounds
+    # Rendering and sounds
 
     def play_background_music(self):
         pygame.mixer.music.load('resources/bg_music_1.mp3')
@@ -169,36 +166,40 @@ class Game:
         bg = pygame.image.load('resources/background.jpg')
         self.surface.blit(bg, (0, 0))
 
-    def play(self):
+    def play(self, timer):
         self.render_background()
         self.snake.walk()
         self.food.draw()
         self.level.draw()
-        self.wall.draw()
         self.display_score()
+        self.display_countdown(timer)
         pygame.display.flip()
-
-        #When the snake eats the apple:
+        if timer == 0:
+            raise 'game over'
+        # When the snake eats the apple:
         if self.is_collision(self.snake.x[0], self.snake.y[0], self.food.x, self.food.y):
             self.play_sound('ding')
             self.snake.increase_length()
             self.food.move()
 
-        #When the snake collides with itself:
+        # When the snake collides with itself:
         for i in range(3, self.snake.length):
             if self.is_collision(self.snake.x[0], self.snake.y[0], self.snake.x[i], self.snake.y[i]):
                 self.play_sound('crash')
                 raise 'game over'
         # Serpiente choca con un muro
-
-            #if self.is_collision(self.snake.x[0], self.snake.y[0], i[0], i[1]):
         for wall in self.level.position_wall:
             if self.is_collision(self.snake.x[0], self.snake.y[0], wall[0], wall[1]):
                 self.play_sound('crash')
                 raise 'game over'
 
-    def show_game_over(self):  #Game over
-        self.render_background()  #Clears the background
+        for wall in self.level.position_wall:
+            if self.is_collision(self.food.x, self.food.y, wall[0], wall[1]):
+                self.food.move()
+
+
+    def show_game_over(self):  # Game over
+        self.render_background()  # Clears the background
         font = pygame.font.SysFont('arial', 30)
         line1 = font.render(f"Game is over! Your score is {self.snake.length}", True, (255, 255, 255))
         self.surface.blit(line1, (200, 300))
@@ -209,20 +210,30 @@ class Game:
         pygame.mixer.music.pause()
 
     def display_score(self):
-    # When ever you want to show something on a
-    # surface you have to use the blit function
+        # When ever you want to show something on a
+        # surface you have to use the blit function
         font = pygame.font.SysFont('arial', 30)
         score = font.render(f'Score: {self.snake.length-2}', True, (255, 255, 255))
         self.surface.blit(score, (800, 10))
 
-    def reset(self):
+    def display_countdown(self, timer):
+        # When ever you want to show something on a
+        # surface you have to use the blit function
+        font = pygame.font.SysFont('arial', 30)
+        score = font.render(f'Time left: {timer}', True, (255, 255, 255))
+        self.surface.blit(score, (10, 10))
+
+
+    def reset(self, lives):
+        lives -= 1 #  Doesnt works
         self.snake = Snake(self.surface, 2)
         self.food = Food(self.surface)
 
     def run(self):
+        lives = 3
+        countdown = 10
         running = True
         pause = False
-
         while running:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
@@ -247,13 +258,15 @@ class Game:
                     running = False
             try:
                 if not pause:
-                    self.play()
+                    self.play(countdown)
             except Exception as e:
                 self.show_game_over()
                 pause = True
-                self.reset()
+                self.reset(lives)
 
             time.sleep(.2)
+            countdown -= 1
+
 
 def runGame():
     game = Game()
