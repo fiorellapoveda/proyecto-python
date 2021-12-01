@@ -166,13 +166,14 @@ class Game:
         bg = pygame.image.load('resources/background.jpg')
         self.surface.blit(bg, (0, 0))
 
-    def play(self, timer):
+    def play(self, timer, lives):
         self.render_background()
         self.snake.walk()
         self.food.draw()
         self.level.draw()
         self.display_score()
         self.display_countdown(timer)
+        self.display_lives(lives)
         pygame.display.flip()
         if timer == 0:
             raise 'game over'
@@ -223,9 +224,15 @@ class Game:
         score = font.render(f'Time left: {timer}', True, (255, 255, 255))
         self.surface.blit(score, (10, 10))
 
+    def display_lives(self, lives):
+        # When ever you want to show something on a
+        # surface you have to use the blit function
+        font = pygame.font.SysFont('arial', 30)
+        score = font.render(f'Lives left: {lives}', True, (255, 255, 255))
+        self.surface.blit(score, (400, 10))
 
-    def reset(self, lives):
-        lives -= 1 #  Doesnt works
+
+    def reset(self):
         self.snake = Snake(self.surface, 2)
         self.food = Food(self.surface)
 
@@ -239,6 +246,8 @@ class Game:
                 if event.type == KEYDOWN:
 
                     if event.key == K_RETURN:
+                        lives -= 1
+                        countdown = 10
                         pygame.mixer.music.unpause()
                         pause = False
                     if event.key == K_ESCAPE:
@@ -258,11 +267,11 @@ class Game:
                     running = False
             try:
                 if not pause:
-                    self.play(countdown)
+                    self.play(countdown, lives)
             except Exception as e:
                 self.show_game_over()
                 pause = True
-                self.reset(lives)
+                self.reset()
 
             time.sleep(.2)
             countdown -= 1
