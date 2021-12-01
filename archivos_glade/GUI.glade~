@@ -86,7 +86,7 @@
           <object class="GtkImage" id="imagen">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">resources/snake.png</property>
+            <property name="pixbuf">../resources/snake.png</property>
           </object>
           <packing>
             <property name="expand">False</property>
